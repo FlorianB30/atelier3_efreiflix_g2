@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import './styles.css';
 
 const Ariane = () => {
-  const [data, setData] = useState(['Netflix']);
+  const [data, setData] = useState(['Efreiflix']);
 
   const push = (event) => {
     let datas = data.slice();
