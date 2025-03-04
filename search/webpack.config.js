@@ -54,6 +54,7 @@ module.exports = {
       filename: "remoteEntry.js",
       exposes: {
         "./Search": "./src/Search.vue",
+        "./bootstrap": "./src/bootstrap.js"
       },
       shared: {
         vue: {

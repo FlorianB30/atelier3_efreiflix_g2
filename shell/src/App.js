@@ -87,35 +87,44 @@ const LoadingPlaceholder = ({ text }) => (
         <div key={i} className="min-w-[200px] h-[300px] bg-gray-800 rounded animate-pulse"></div>
       ))}
     </div>
-    <div className="text-center mt-4">{text || 'Chargement...'}</div>
+    <div className="text-center mt-4">{text || "Chargement..."}</div>
   </div>
 );
 
 const App = () => {
-  const [activeSection, setActiveSection] = React.useState('home');
+  const [activeSection, setActiveSection] = React.useState("home");
 
   useEffect(() => {
-    localStorage.setItem('user', JSON.stringify({ id: 1, profileId: 1 }));
+    localStorage.setItem("user", JSON.stringify({ id: 1, profileId: 1 }));
   }, []);
 
   return (
     <div className="bg-[#141414] text-white min-h-screen font-sans">
       {/* Netflix-like header */}
       <header className="bg-black/80 px-8 py-4 flex items-center sticky top-0 z-50 shadow-md">
-        <div className="text-[#E50914] font-bold text-3xl">
-          EFREIFlix
+        <div className="text-[#E50914] font-bold text-3xl">EFREIFlix</div>
+
+        <div className="ml-8 flex-grow max-w-md">
+          <ErrorBoundary fallback="Erreur lors du chargement de la recherche.">
+            <SearchWrapper />
+          </ErrorBoundary>
         </div>
+
         <nav className="ml-auto">
           <ul className="flex gap-6 list-none m-0 p-0">
-            <li 
-              className={`cursor-pointer ${activeSection === 'home' ? 'font-bold' : 'font-normal'}`}
-              onClick={() => setActiveSection('home')}
+            <li
+              className={`cursor-pointer ${
+                activeSection === "home" ? "font-bold" : "font-normal"
+              }`}
+              onClick={() => setActiveSection("home")}
             >
               Accueil
             </li>
-            <li 
-              className={`cursor-pointer ${activeSection === 'films' ? 'font-bold' : 'font-normal'}`}
-              onClick={() => setActiveSection('films')}
+            <li
+              className={`cursor-pointer ${
+                activeSection === "films" ? "font-bold" : "font-normal"
+              }`}
+              onClick={() => setActiveSection("films")}
             >
               Films
             </li>
@@ -162,7 +171,7 @@ const App = () => {
 
       <main className="p-8">
         {/* Hero banner section - only show on home */}
-        {activeSection === 'home' && (
+        {activeSection === "home" && (
           <section className="mb-12 relative h-[400px] rounded-lg overflow-hidden bg-gradient-to-b from-black/10 to-[#141414] bg-[url('https://assets.nflxext.com/ffe/siteui/vlv3/c31c3123-3df7-4359-8b8c-475bd2d9925d/15feb590-3d73-45e9-9e4a-2eb334c33cbb/FR-en-20231225-popsignuptwoweeks-perspective_alpha_website_large.jpg')] bg-cover bg-center flex flex-col justify-end p-8">
             <h1 className="text-5xl m-0 mb-4">Bienvenue sur EFREIFlix</h1>
             <p className="text-xl max-w-[600px] mb-6">
@@ -172,11 +181,15 @@ const App = () => {
         )}
 
         {/* Main content area with catalogue - show on home or films */}
-        {(activeSection === 'home' || activeSection === 'films') && (
+        {(activeSection === "home" || activeSection === "films") && (
           <section className="mb-12">
             <h2 className="text-2xl mb-6">Catalogue</h2>
             <ErrorBoundary fallback="Erreur lors du chargement du catalogue.">
-              <Suspense fallback={<LoadingPlaceholder text="Chargement du catalogue..." />}>
+              <Suspense
+                fallback={
+                  <LoadingPlaceholder text="Chargement du catalogue..." />
+                }
+              >
                 <Catalogue />
               </Suspense>
             </ErrorBoundary>
