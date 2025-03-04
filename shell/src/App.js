@@ -30,14 +30,14 @@ const App = () => {
       <Suspense fallback={<div>Chargement du header...</div>}>
         <Header />
       </Suspense>
+      <Suspense fallback={<div>Chargement du skeleton...</div>}>
+        <Ariane />
+      </Suspense>
 
       <main style={{ padding: '2rem' }}>
         <h2>Bienvenue sur Efreiflix</h2>
         <p>Contenu principal de l'application...</p>
 
-        <Suspense fallback={<div>Chargement du skeleton...</div>}>
-          <Ariane />
-        </Suspense>
 
         <button onClick={nav}>aller</button>
         <button onClick={returnNav}>retour</button>
