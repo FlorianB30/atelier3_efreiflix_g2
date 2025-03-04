@@ -42,17 +42,17 @@ module.exports = {
         // Déclaration du micro-frontend Header
         // Format: "nom_remote@url/fichier_entree.js"
         header: 'header@http://localhost:3001/remoteEntry.js', // Configuration pour consommer le MFE 'header'
-        skeleton: 'skeleton@http://localhost:3002/remoteEntry.js'
+        ariane: 'ariane@http://localhost:4325/ariane.js'
       },
 
       shared: {
         // Configuration du partage des dépendances
-        react: { 
+        react: {
           singleton: true,     // Une seule instance de React
           requiredVersion: false, // Pas de vérification stricte des versions
           eager: true         // Chargement immédiat pour l'app host
         },
-        "react-dom": { 
+        "react-dom": {
           singleton: true,
           requiredVersion: false,
           eager: true
