@@ -8,10 +8,10 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: 'http://localhost:3055/', // Match the devServer port
+    publicPath: 'http://localhost:3002/', // Different port from header MFE
   },
   devServer: {
-    port: 3055, // Different port from header MFE
+    port: 3002, // Different port from header MFE
     static: {
       directory: path.join(__dirname, 'public'),
     },
@@ -20,6 +20,7 @@ module.exports = {
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
       'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
     },
+    historyApiFallback: true, // To enable route call
   },
   module: {
     rules: [
@@ -41,13 +42,10 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: 'recommendations',
+      name: 'videoplayer',
       filename: 'remoteEntry.js',
       exposes: {
-        './recommendations': './src/recommendations',
-      },
-      remotes: {
-        preview: 'preview@http://localhost:3033/productPreview.js',
+        './VideoPlayer': './src/VideoPlayer',
       },
       shared: {
         react: {
@@ -60,16 +58,6 @@ module.exports = {
           requiredVersion: dependencies['react-dom'],
           eager: true
         },
-        'axios': {
-          singleton: true,
-          requiredVersion: dependencies.axios,
-          eager: true
-        },
-        'react-icons': {
-          singleton: true,
-          requiredVersion: dependencies['react-icons'],
-          eager: true
-        }
       },
     }),
     new HtmlWebpackPlugin({
