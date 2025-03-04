@@ -9,10 +9,10 @@ module.exports = {
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
-    publicPath: "http://localhost:3003/", // Different port from other MFEs
+    publicPath: "http://localhost:3030/", // Different port from other MFEs
   },
   devServer: {
-    port: 3003, // Different port from other MFEs
+    port: 3030, // Different port from other MFEs
     static: {
       directory: path.join(__dirname, "public"),
     },
@@ -52,6 +52,7 @@ module.exports = {
       filename: "remoteEntry.js",
       exposes: {
         "./Search": "./src/Search.vue",
+        "./bootstrap": "./src/bootstrap.js"
       },
       shared: {
         vue: {
