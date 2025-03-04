@@ -1,26 +1,14 @@
-/**
- * Configuration Webpack pour l'application Shell (Host Application)
- * 
- * Ce fichier configure l'application principale qui va héberger et orchestrer
- * les différents micro-frontends. En tant qu'application hôte, elle est responsable
- * de l'importation et de l'intégration des composants distants.
- * 
- * Points clés :
- * - Configuration du port de développement (3000)
- * - Déclaration des micro-frontends distants (remotes)
- * - Configuration du partage des dépendances
- * - Configuration de Babel pour la transpilation React
- */
-
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
+const path = require("path");
 
 module.exports = {
   entry: "./src/index.js",
   mode: "development",
   devServer: {
-    port: 3000, // Port distinct du micro-frontend Header (3001)
-    hot: true,  // Activation du Hot Module Replacement
+    port: 3000,
+    hot: true,
+    historyApiFallback: true,
   },
   module: {
     rules: [
@@ -29,28 +17,53 @@ module.exports = {
         loader: "babel-loader",
         exclude: /node_modules/,
         options: {
-          presets: ["@babel/preset-react"], // Configuration Babel pour React
+          presets: ["@babel/preset-react"],
         },
       },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
+      }
     ],
   },
   plugins: [
-    // Configuration Module Federation pour l'application hôte
     new ModuleFederationPlugin({
-      name: "shell", // Nom unique de l'application
+      name: "shell",
       remotes: {
-        // Déclaration du micro-frontend Header
-        // Format: "nom_remote@url/fichier_entree.js"
-        header: 'header@http://localhost:3001/remoteEntry.js', // Configuration pour consommer le MFE 'header'
-        ariane: 'ariane@http://localhost:4325/ariane.js'
+
+        // Updated remote URLs to use Vercel deployments
+        // Use the deployed URLs when available, otherwise fallback to localhost for development
+        catalogue_G1: process.env.NODE_ENV === 'production' 
+          ? 'catalogue_G1@https://mfe-g2-catalogue.vercel.app/remoteEntry.js'
+          : 'catalogue_G1@http://localhost:3003/remoteEntry.js',
+        recommendations: process.env.NODE_ENV === 'production'
+          ? 'recommendations@https://mfe-g2-recommendations.vercel.app/remoteEntry.js'
+          : 'recommendations@http://localhost:3055/remoteEntry.js',
+        watchlist: process.env.NODE_ENV === 'production'
+          ? 'watchlist@https://mfe-g2-watchlist.vercel.app/watchlist_chunk.js'
+          : 'watchlist@http://localhost:3031/watchlist_chunk.js',
+        notation: process.env.NODE_ENV === 'production'
+          ? 'notation@https://mfe-g2-notation.vercel.app/Notation.js'
+          : 'notation@http://localhost:3032/Notation.js',
+        preview: process.env.NODE_ENV === 'production'
+          ? 'preview@https://mfe-g2-product-fiche.vercel.app/productPreview.js'
+          : 'preview@http://localhost:3033/productPreview.js',
+        comments: process.env.NODE_ENV === 'production'
+          ? 'comments@https://mfe-g2-comments.vercel.app/Comments.js'
+          : 'comments@http://localhost:3025/Comments.js',
+        userprofile: process.env.NODE_ENV === 'production'
+          ? 'userProfile@https://mfe-g2-userprofile.vercel.app/userProfile.js'
+          : 'userProfile@http://localhost:3034/userProfile.js',
+        favoris: process.env.NODE_ENV === 'production'
+          ? 'favoris@https://mfe-g2-favoris.vercel.app/remoteEntry.js'
+          : 'favoris@http://localhost:3010/remoteEntry.js'
       },
 
       shared: {
-        // Configuration du partage des dépendances
         react: {
-          singleton: true,     // Une seule instance de React
-          requiredVersion: false, // Pas de vérification stricte des versions
-          eager: true         // Chargement immédiat pour l'app host
+          singleton: true,
+          requiredVersion: false,
+          eager: true
         },
         "react-dom": {
           singleton: true,
@@ -64,4 +77,13 @@ module.exports = {
       template: "./public/index.html",
     }),
   ],
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
+  output: {
+    publicPath: '/',
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].js',
+    chunkFilename: '[id].js',
+  },
 }; 
