@@ -105,12 +105,6 @@ const App = () => {
       <header className="bg-black/80 px-8 py-4 flex items-center sticky top-0 z-50 shadow-md">
         <div className="text-[#E50914] font-bold text-3xl">EFREIFlix</div>
 
-        <div className="ml-8 flex-grow max-w-md">
-          <ErrorBoundary fallback="Erreur lors du chargement de la recherche.">
-            <SearchWrapper />
-          </ErrorBoundary>
-        </div>
-
         <nav className="ml-auto">
           <ul className="flex gap-6 list-none m-0 p-0">
             <li
